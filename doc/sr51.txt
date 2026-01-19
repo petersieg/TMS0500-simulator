@@ -13,4 +13,7 @@ This C is used for random generator
 
 == printer ==
 
-printer detection is not tested. No KP-0 check
+printer detection is not tested. No KP-0 check. It is
+always ignore if returned by key scan.
+If trace key is used, KP-0 is needed otherwise a key
+always press will be detected (D15 is tested after D0).

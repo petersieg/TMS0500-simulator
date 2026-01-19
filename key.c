@@ -590,7 +590,9 @@ int key_init(struct chip *chip, const char *name, enum hw hw_opt)
         cpu.key_press_cycle = 1;
         cpu.keymap = key_table_sr51;
         printf(key_help_sr51);
-        /* no printer detection on sr51 */
+        /* no printer detection on sr51, but needed for trace function */
+        if (hw_opt & HW_PRINTER)
+            cpu.key[0] |= (1 << KP_BIT);
     }
     else if (!strcmp(name, "sr60")) {
         cpu.keymap = key_table_sr60;

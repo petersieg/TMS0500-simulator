@@ -90,7 +90,7 @@ static int scom_const_process(struct scom *scom, struct bus *bus)
             int addr = (scom->fifo_const) & 0x7F;
             memcpy(bus->io, scom->CONST[addr], sizeof(bus->io));
             if (log_flags & LOG_SHORT)
-                LOG (" CONST.%d=", addr); for (int i = 15; i >= 0; i--) LOG("%X", bus->io[i]);
+                LOG (" CONST.%d=", addr + scom->start_const); for (int i = 15; i >= 0; i--) LOG("%X", bus->io[i]);
         }
     }
     else if (bus->sstate == 15 && !bus->write) {
@@ -172,6 +172,26 @@ static int scom2_reg_process(struct scom *scom, struct bus *bus)
         if ((bus->irg & 0xFFEF) == 0x0A0F) {
             /* address in hex 0-F */
             int addr = bus->io[0];
+            /* if on this D cycle we are doing RCL io output
+             * make the address 0 (0 io input).
+             * SR51-II polar conversion is doing
+             * - instruction that keep IO to zero
+             * - RCL
+             * - MOV     A.MANT,#0
+             * - STO
+             * - ADD     IO.ALL,A,#0
+             * the code is doing a alu operation
+             * between the scom memory and cpu register
+             * We want to keep same scom register 0
+             * and not depend of alu operation.
+             * Without that SR51-II polar conversion
+             * is doing infinite loop
+             */
+            if (scom->fifo_reg & 0x10) {
+                addr = 0;
+                LOG(" force 0 STO");
+            }
+
             if (addr >= scom->start_reg && addr < scom->end_reg) {
                 addr -= scom->start_reg;
                 scom->fifo_reg |= ((addr << 5) | (bus->irg & 0x1F)) << 16; /* 2 cycles delay */

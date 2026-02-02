@@ -579,8 +579,6 @@ int execute (unsigned short opcode) {
                     {0, ""}  // Xch A,E
                 };
                 alu_out = &ALU_DST[opcode & 0x07];
-                if ((opcode & 0x07) == 0x01)
-                    cpu.flags |= FLG_IO_VALID;
                 alu_inp = &ALU_OP[(opcode >> 3) & 0x1F];
                 switch (opcode & 0x00F8) {
                     default:
@@ -708,8 +706,21 @@ static inline int run_early(int opcode)
                     return 1;
             }
         default: /* alu */
-            if ((opcode & 7) == 1) /* IO write. Can set R5/COND */
+            /* IO.ALL cause a write on bus. Can set R5/COND.
+             * We need only to do IO out on ALL mask, otherwise
+             * it break code like SR51 unit conversion (10 conversion use 00 const)
+             * This is because the code do
+             * RCL H
+             * SUB     IO.DPT,A,#0
+             * and use r5 result
+             * RCL will output data on io bus. It make no sense
+             * that alu also output data on io bus and ignore RCL.
+             * IO in this case mean nop to do a test.
+             */
+            if ((opcode & 0x07) == 0x01 && ((opcode >> 8) & 0x0F) == 1) {
+                cpu.flags |= FLG_IO_VALID;
                 return 1;
+            }
     }
     return 0;
 }
@@ -770,6 +781,7 @@ static int alu_process(void *priv, struct bus *bus)
     cpu.digit = bus->dstate;
     cpu.EXT = bus->ext;
     cpu.key = bus->key_line;
+    cpu.flags &= ~FLG_IO_VALID;
 
     if (cpu.reset) {
         if (bus->sstate == 0 && bus->write && cpu.reset-- > 1)
@@ -809,7 +821,6 @@ static int alu_process(void *priv, struct bus *bus)
             execute(cpu.opcode);
             if (cpu.flags & FLG_IO_VALID) {
                 memcpy(bus->io, cpu.Sout,  sizeof(bus->io));
-                cpu.flags &= ~FLG_IO_VALID;
             }
         }
         /* Output KR, unless MOV     KR,EXT[4..15]

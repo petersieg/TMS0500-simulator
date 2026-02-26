@@ -40,6 +40,8 @@ struct ram {
     int addr;
 };
 
+static int ignore_cs = 1;
+
 static int ram_process(void *priv, struct bus *bus)
 {
     struct ram *ram = priv;
@@ -76,9 +78,17 @@ static int ram_process(void *priv, struct bus *bus)
              * for addr > 99, hexa is used on digit[3]
              * B0 for 110. This use the fact
              * that carry is not done on io bus.
-             * io[3] is like a chip select (used on SR60)
+             * io[4] is like a chip select (used on SR60)
+             *
+             * a chip is 30 numbers
+             * chip have ADD0 and ADD1 pins to configure 120 number
+             * chip have a CS pin selected by an external decoder
+             * CS/io[4] should be used only on SR60 (otherwise SR52
+             * RCL/STO programm access doesn't work)
              */
-            int addr = bus->io[4] * 120 + bus->io[3] * 10 + bus->io[2];
+            int addr = bus->io[3] * 10 + bus->io[2];
+            if (!ignore_cs)
+                addr += bus->io[4] * 120;
             int cmd = bus->io[0];
             if (addr >= ram->start && addr < ram->end) {
                 if (cmd <= 2 || cmd == 4) {
@@ -113,6 +123,11 @@ int ram_init(struct chip *chip, int addr)
     ram->flags = 0;
     ram->start = addr * 30;
     ram->end = ram->start + 30;
+    if (ram->start >= 120) {
+        ignore_cs = 0;
+        printf("ram will use cs\n");
+    }
+
     /* ram data are reset on power
      * not reset by rom */
     memset(ram->data, 0, 30*16);

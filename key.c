@@ -227,12 +227,12 @@ static const struct keymap key_table_sr51II[] = {
 static const char *key_help_sr51II =
 	  "[2nd]=Esc      [sin\\sinh]=s        [cos\\cosh]=c   [tan\\tanh]=t [CLR\\CA]=Space\n"
 	  "[INV]=I        [%%\\D%%]=%%       [ln\\log]=l    [e^x\\10^x]=E  [xsqrty\\x!]=r\n"
-      "[xy]=X         [x^2\\MEAN]=x      [sqrt\\S.DEV]=S [1/x\\VAR]=i [Y^x\\CORR]=y\n"
+      "[xy\\P->R]=X         [x^2\\MEAN]=x      [sqrt\\S.DEV]=S [1/x\\VAR]=i [Y^x\\CORR]=y\n"
       "[SUM+\\SUM-]=U  [EE\\Eng]=e  [(\\const]=(    [)\\pi]=)     [/\\Slope]=/\n"
       "[STO\\Fix]=>   [7]=7          [8]=8        [9]=9        [x\\Intcp]=*\n"
 	  "[RCL\\EXC]=<    [4]=4          [5]=5        [6]=6        [-\\x']=-\n"
 	  "[SUM\\Prd]=&   [1]=1          [2]=2        [3]=3        [+\\y']=+\n"
-	  "[CE]=Back     [0]=0     [.]=.    [+/-]=n  [=]=Enter\n";
+	  "[CE]=Back     [0\\DMS.DD]=0     [.\\DEG]=.    [+/-\\RAD]=n  [=\\GRAD]=Enter\n";
 
 
 static const struct keymap key_table_sr51[] = {

@@ -19,12 +19,12 @@ bus like shared data.
 
 ## How to use it
 
-build (only tested on linux)
+build (original tested on linux; now compiled under Mac OS Big Sur - disasm.c required 2 commented out lines 297+299 and array wait to be renamed to _wait)
 ```
 make
 ```
 
-download firmware
+download firmware (wget was not available, so I changed get_rom.sh to use curl - original is in: get_rom_wget.sh)
 ```
 ./bin/get_rom.sh
 ```

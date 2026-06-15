@@ -1,4 +1,3 @@
-// at 297+299
 /*
  * Copyright (C) 2014 Hynek Sladky; sladky@mujmail.cz
  * Copyright (C) 2024 by Matthieu CASTET <castet.matthieu@free.fr>
@@ -129,7 +128,7 @@ static const char *flag[16] = {
   "MOV\tfB[1..4],R5" //S0 ... S3
 };
 // 0 1010 xxxx ____
-static const char *_wait[16] = {
+static const char *wait[16] = {
   "WAIT\tD%u",
   "CLR\tIDL",
   "CLR\tfA",
@@ -295,9 +294,9 @@ void disasm (unsigned addr, unsigned opcode) {
               if (opcode & 0x80)
                   DIS("\t;???? %d", opcode & 0xc0);
           } else if (wait_type == 0x0E) { // NOOP/LIB
-              //DIS (no_op[wait_arg]);
+              DIS (no_op[wait_arg]);
           } else {
-              //DIS (wait[opcode&0x0F], wait_arg);
+              DIS (wait[opcode&0x0F], wait_arg);
               /* 0 : wait Dstate, 5 : tst KR[arg], 7 mov R5, #arg */
               if (!(wait_type == 0 || wait_type == 5 || wait_type == 7) &&
                       wait_arg)

@@ -7,7 +7,14 @@ This is based of previous work from Hynek Sladký :
 - http://hsl.wz.cz/ti\_59.htm
 - https://www.hrastprogrammer.com/emulators.htm
 
-Since License GLPL 2.1 was mentioned in the source codes, I added that license as a file.
+Since License GLGPL 2.1 was mentioned in the source codes:
+```
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+```
+I added that license as a file.
 
 It have been tested on rom of
 SR50, SR51, SR52, SR56, SR60 (partial support), ti58, ti59, ti58c

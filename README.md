@@ -7,6 +7,8 @@ This is based of previous work from Hynek Sladký :
 - http://hsl.wz.cz/ti\_59.htm
 - https://www.hrastprogrammer.com/emulators.htm
 
+Since License GLPL 2.1 was mentioned in the source codes, I added that license as a file.
+
 It have been tested on rom of
 SR50, SR51, SR52, SR56, SR60 (partial support), ti58, ti59, ti58c
 

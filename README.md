@@ -7,7 +7,7 @@ This is based of previous work from Hynek Sladký :
 - http://hsl.wz.cz/ti\_59.htm
 - https://www.hrastprogrammer.com/emulators.htm
 
-Since License GLGPL 2.1 was mentioned in the source codes:
+Since License LGPL 2.1 was mentioned in the source codes:
 ```
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

@@ -1,0 +1,3 @@
+#!/bin/sh
+./bin/ti59.sh -p -l rom/module-lib/TMC0541.txt
+

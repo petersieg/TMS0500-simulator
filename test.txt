@@ -1,0 +1,18 @@
+Test Modul:
+-----------
+2nd
+Pgm
+0 1
+SBR =
+
+
+Counter:
+--------
+LRN
++ 1 =
+Pause
+RST
+LRN
+RST
+R/S
+

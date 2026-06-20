@@ -16,6 +16,9 @@ Since License LGPL 2.1 was mentioned in the source codes:
 ```
 I added that license as a file.
 
+ti59 - to press 2nd key, press esc 1st:
+!(https://github.com/petersieg/TMS0500-simulator/blob/master/ti59.png)
+
 It have been tested on rom of
 SR50, SR51, SR52, SR56, SR60 (partial support), ti58, ti59, ti58c
 

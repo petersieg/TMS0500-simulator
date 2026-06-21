@@ -304,7 +304,7 @@ static unsigned long long GetTickCount (void)
 {
 	struct timespec tp;
 
-	//clock_gettime(CLOCK_MONOTONIC, &tp);
+	clock_gettime(CLOCK_MONOTONIC, &tp);
 
 
 	return tp.tv_sec * 1000 + tp.tv_nsec / 1000000;

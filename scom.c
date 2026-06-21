@@ -83,6 +83,7 @@ struct scom {
 
 static int scom_const_process(struct scom *scom, struct bus *bus)
 {
+    int i;
     if (bus->sstate == 0 && bus->write) {
         scom->fifo_const >>= 8;
         /* check if fifo is valid */
@@ -90,7 +91,7 @@ static int scom_const_process(struct scom *scom, struct bus *bus)
             int addr = (scom->fifo_const) & 0x7F;
             memcpy(bus->io, scom->CONST[addr], sizeof(bus->io));
             if (log_flags & LOG_SHORT)
-                LOG (" CONST.%d=", addr + scom->start_const); for (int i = 15; i >= 0; i--) LOG("%X", bus->io[i]);
+                LOG (" CONST.%d=", addr + scom->start_const); for (i = 15; i >= 0; i--) LOG("%X", bus->io[i]);
         }
     }
     else if (bus->sstate == 15 && !bus->write) {
@@ -111,13 +112,14 @@ static int scom_const_process(struct scom *scom, struct bus *bus)
 
 static int scom_reg_process(struct scom *scom, struct bus *bus)
 {
+    int i;
     if (bus->sstate == 0 && bus->write) {
         scom->fifo_reg >>= 8;
         /* RCL */
         if (scom->fifo_reg & 0x10) {
             int addr = (scom->fifo_reg >> 5) & 7;
             memcpy(bus->io, scom->SCOM[addr], sizeof(bus->io));
-            LOG (" RCL.%d=", addr + scom->start_reg); for (int i = 15; i >= 0; i--) LOG("%X", bus->io[i]);
+            LOG (" RCL.%d=", addr + scom->start_reg); for (i = 15; i >= 0; i--) LOG("%X", bus->io[i]);
             LOG (" ");
         }
     }
@@ -126,7 +128,7 @@ static int scom_reg_process(struct scom *scom, struct bus *bus)
         if ((scom->fifo_reg & 1) && !(scom->fifo_reg & 0x10)) {
             int addr = (scom->fifo_reg >> 5) & 7;
             memcpy(scom->SCOM[addr], bus->io, sizeof(bus->io));
-            LOG (" STO.%d=", addr + scom->start_reg); for (int i = 15; i >= 0; i--) LOG("%X", bus->io[i]);
+            LOG (" STO.%d=", addr + scom->start_reg); for (i = 15; i >= 0; i--) LOG("%X", bus->io[i]);
             LOG (" ");
         }
         /* match STO/RCL inst */
@@ -150,13 +152,14 @@ static int scom_reg_process(struct scom *scom, struct bus *bus)
 
 static int scom2_reg_process(struct scom *scom, struct bus *bus)
 {
+    int i;
     if (bus->sstate == 0 && bus->write) {
         scom->fifo_reg >>= 8;
         /* RCL */
         if (scom->fifo_reg & 0x10) {
             int addr = (scom->fifo_reg >> 5) & 7;
             memcpy(bus->io, scom->SCOM[addr], sizeof(bus->io));
-            LOG (" RCL.%d=", addr + scom->start_reg); for (int i = 15; i >= 0; i--) LOG("%X", bus->io[i]);
+            LOG (" RCL.%d=", addr + scom->start_reg); for (i = 15; i >= 0; i--) LOG("%X", bus->io[i]);
             LOG (" ");
         }
     }
@@ -165,7 +168,7 @@ static int scom2_reg_process(struct scom *scom, struct bus *bus)
         if ((scom->fifo_reg & 1) && !(scom->fifo_reg & 0x10)) {
             int addr = (scom->fifo_reg >> 5) & 7;
             memcpy(scom->SCOM[addr], bus->io, sizeof(bus->io));
-            LOG (" STO.%d=", addr + scom->start_reg); for (int i = 15; i >= 0; i--) LOG("%X", bus->io[i]);
+            LOG (" STO.%d=", addr + scom->start_reg); for (i = 15; i >= 0; i--) LOG("%X", bus->io[i]);
             LOG (" ");
         }
         /* match STO F/RCL F inst */
@@ -232,8 +235,8 @@ static int scom2_process(void *priv, struct bus *bus)
 
 int scom_init(struct chip *chip, const char *name)
 {
-    int base;
-    unsigned int size;
+    int j,base;
+    unsigned int i,size;
     struct scom *scom;
     scom = malloc(sizeof(*scom));
     if (!scom)
@@ -246,9 +249,9 @@ int scom_init(struct chip *chip, const char *name)
 	scom->start_const = base;
 
     printf("const base %d size %d\n", base, size);
-    for (unsigned int i = 0; i < size; i++) {
+    for (i = 0; i < size; i++) {
         printf("%02d: ", i+base);
-        for (int j = 15; j >= 0; j--) {
+        for (j = 15; j >= 0; j--) {
                 printf("%x", scom->CONST[i][j]);
         }
         printf("\n");

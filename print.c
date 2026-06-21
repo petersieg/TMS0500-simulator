@@ -161,6 +161,7 @@ static void print_step(struct print *print)
 
 static int print_process(void *priv, struct bus *bus)
 {
+    int i,j;
     struct print *print = priv;
     if (bus->sstate == 15 && !bus->write) {
         if ((bus->irg & 0xFF0F) != print->mask)
@@ -181,10 +182,10 @@ static int print_process(void *priv, struct bus *bus)
             {
                 /* load func */
                 int code = (bus->ext >> 3) & 0x7F;
-                int i;
+                
                 for (i = 0; *print_func[i].str; i++) {
                     if (code == print_func[i].code) {
-                        for (int j = 2; j >= 0; j-- ) {
+                        for (j = 2; j >= 0; j-- ) {
                             print->buffer[print->head] = print_func[i].str[j];
                             print_step(print);
                         }
@@ -194,7 +195,7 @@ static int print_process(void *priv, struct bus *bus)
                 }
                 if (!*print_func[i].str) {
                     LOG("PRINT[%d]='%d not fund' ", print->head, code);
-                    for (int j = 2; j >= 0; j-- ) {
+                    for (j = 2; j >= 0; j-- ) {
                         print->buffer[print->head] = '?';
                         print_step(print);
                     }

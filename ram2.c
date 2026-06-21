@@ -49,13 +49,14 @@ struct ram {
 
 static int ram_process(void *priv, struct bus *bus)
 {
+    int i;
     struct ram *ram = priv;
     if (bus->sstate == 0 && bus->write) {
         if ((ram->flags & RAM_EXEC_CMD)) {
             if (ram->cmd == 0) {
                 memcpy(bus->io, ram->data[ram->addr], sizeof(bus->io));
                 LOG (" RAM2.rd[%02d]=", ram->addr + ram->start);
-                for (int i = 15; i >= 0; i--) LOG("%X", bus->io[i]);
+                for (i = 15; i >= 0; i--) LOG("%X", bus->io[i]);
                 ram->flags &= ~RAM_EXEC_CMD;
             }
         }
@@ -64,7 +65,7 @@ static int ram_process(void *priv, struct bus *bus)
         /* write ram */
         if ((ram->flags & RAM_EXEC_CMD) && ram->cmd == 1) {
             memcpy(ram->data[ram->addr], bus->io, sizeof(bus->io));
-            LOG (" RAM2.wr[%02d]=", ram->addr + ram->start); for (int i = 15; i >= 0; i--) LOG("%X", bus->io[i]);
+            LOG (" RAM2.wr[%02d]=", ram->addr + ram->start); for (i = 15; i >= 0; i--) LOG("%X", bus->io[i]);
             ram->flags &= ~RAM_EXEC_CMD;
         }
         if (ram->flags & RAM_WAIT_CMD) {

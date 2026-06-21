@@ -88,6 +88,7 @@ int load_dumpK (unsigned char buf[][16], int buf_len, const char *name, int *bas
     if ((f = fopen (name, "rt")) == NULL)
         return 0;
     while (!feof (f)) {
+	int j;
         int addr, idx = 0;
         uint64_t data;
         if (!fgets (line, LINELEN, f))
@@ -116,7 +117,7 @@ int load_dumpK (unsigned char buf[][16], int buf_len, const char *name, int *bas
         while (line[idx] && line[idx] <= ' ') idx++;
         while (sscanf (line+idx, "%lX", &data) > 0) {
             if (addr < buf_len) {
-                for (int j = 0; j < 16; j++) {
+                for (j = 0; j < 16; j++) {
                     buf[addr][j] = data & 0xf;
                     data >>= 4;
                 }

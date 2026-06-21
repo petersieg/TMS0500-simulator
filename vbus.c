@@ -43,6 +43,7 @@ int run(struct chip chips[], struct bus *bus)
     bus->display_digit = ' ';
 
     while (1) {
+	int i;
         bus->ext = 0;
         bus->irg = 0;
         bus->addr = -1;
@@ -50,7 +51,7 @@ int run(struct chip chips[], struct bus *bus)
         for (bus->sstate = 0; bus->sstate < 16; bus->sstate++) {
             int ret;
             bus->write = 1;
-            for (int i = 0; chips[i].process; i++) {
+            for (i = 0; chips[i].process; i++) {
                 ret = chips[i].process(chips[i].priv, bus);
                 if (ret) {
                     printf("%d error %d\n", i, ret);
@@ -58,7 +59,7 @@ int run(struct chip chips[], struct bus *bus)
                 }
             }
             bus->write = 0;
-            for (int i = 0; chips[i].process; i++) {
+            for (i = 0; chips[i].process; i++) {
                 ret = chips[i].process(chips[i].priv, bus);
                 if (ret) {
                     printf("%d error %d\n", i, ret);
